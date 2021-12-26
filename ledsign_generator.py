@@ -36,7 +36,7 @@ def gen_pixel(pitch, size, color_pix, color_bkg):
 
 
 # colors, BGR!
-col_bkg = arr(0x55, 0x55, 0x55, 0xff, dtype=np.uint8)
+col_bkg = arr(0x25, 0x25, 0x25, 0xff, dtype=np.uint8)
 col_pix_on = arr(0x0f, 0x9b, 0xff, 0xff, dtype=np.uint8)
 col_pix_off = arr(0x04, 0x2c, 0x48, 0xff, dtype=np.uint8)
 
@@ -75,10 +75,10 @@ pixel_yend = pixel_y0 + pixel_pitch * (led_rows+1) - pixel_size
 # calculate skewed pixel for putting into the tilesets
 ##
 
-side_indent_top = 4
-side_indent_bottom = 8
-top_row = 7
-bottom_row = 28
+side_indent_top = 6
+side_indent_bottom = 7
+top_row = 9
+bottom_row = 22
 
 pts1 = arr(  # X, Y
     [pixel_x0, pixel_y0],  # Upper Left
