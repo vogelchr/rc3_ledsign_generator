@@ -4,6 +4,7 @@ import numpy as np
 import scipy.signal
 from pathlib import Path
 import json
+from argparse import ArgumentParser
 
 def arr(*v, **kwargs):
     """ Convenience function to create numpy arrays. """
@@ -34,6 +35,10 @@ def gen_pixel(pitch, size, color_pix, color_bkg):
     ret[offs:, offs:] = color_pix.reshape(1, 1, 4)
     return ret
 
+parser = ArgumentParser()
+parser.add_argument('ledsign_pixels', type=Path)
+parser.add_argument('tileset_json', type=Path)
+args = parser.parse_args()
 
 # colors, BGR!
 col_bkg = arr(0x05, 0x05, 0x05, 0xff, dtype=np.uint8)
@@ -43,7 +48,7 @@ col_pix_off = arr(0x04, 0x2c, 0x48, 0xff, dtype=np.uint8)
 led_rows = 7
 led_cols = 28
 
-led_arr = cv2.imread('scroll_sign_pixels.png')  # imread -> RGB
+led_arr = cv2.imread(args.ledsign_pixels)  # imread -> RGB
 if led_arr.ndim == 3:
     led_arr = np.average(led_arr, axis=2)
 led_arr = (led_arr > 127).astype('i')  # 0/1 valued array
@@ -126,12 +131,12 @@ for pixel_phase in range(n_phases):
     cv2.warpPerspective(world_tile, M,
                         (tile_width, tile_height), dst=dst)
 
-fn = Path('ledsign_animation.png')
+png_fn = args.tileset_json.with_suffix('.png')
 
-cv2.imwrite(fn.as_posix(), tileset)
+cv2.imwrite(png_fn, tileset)
 
 metadata = {
-    'image': fn.name,
+    'image': png_fn.name,
     'imageheight': tileset.shape[0],
     'imagewidth': tileset.shape[1],
     'columns': tileset.shape[1] // 32,
@@ -162,4 +167,4 @@ for k in range(3):
         'id': k
     })
 
-json.dump(metadata, fn.with_suffix('.json').open('w'), indent=4)
+json.dump(metadata, args.tileset_json.open('w'), indent=4)
