@@ -1,10 +1,12 @@
 #!/usr/bin/python
+import json
+from argparse import ArgumentParser
+from pathlib import Path
+
 import cv2
 import numpy as np
 import scipy.signal
-from pathlib import Path
-import json
-from argparse import ArgumentParser
+
 
 def arr(*v, **kwargs):
     """ Convenience function to create numpy arrays. """
@@ -34,6 +36,7 @@ def gen_pixel(pitch, size, color_pix, color_bkg):
     offs = pitch-size
     ret[offs:, offs:] = color_pix.reshape(1, 1, 4)
     return ret
+
 
 parser = ArgumentParser()
 parser.add_argument('ledsign_pixels', type=Path)
