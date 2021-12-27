@@ -51,7 +51,7 @@ col_pix_off = arr(0x04, 0x2c, 0x48, 0xff, dtype=np.uint8)
 led_rows = 7
 led_cols = 28
 
-led_arr = cv2.imread(args.ledsign_pixels)  # imread -> RGB
+led_arr = cv2.imread(args.ledsign_pixels.as_posix())  # imread -> RGB
 if led_arr.ndim == 3:
     led_arr = np.average(led_arr, axis=2)
 led_arr = (led_arr > 127).astype('i')  # 0/1 valued array
@@ -136,7 +136,7 @@ for pixel_phase in range(n_phases):
 
 png_fn = args.tileset_json.with_suffix('.png')
 
-cv2.imwrite(png_fn, tileset)
+cv2.imwrite(png_fn.as_posix(), tileset)
 
 metadata = {
     'image': png_fn.name,
@@ -144,7 +144,7 @@ metadata = {
     'imagewidth': tileset.shape[1],
     'columns': tileset.shape[1] // 32,
     'margin': 0,
-    'name': fn.stem,
+    'name': png_fn.stem,
     'spacing': 0,
     'tilecount': n_phases * 3,
     'tiledversion': '1.7.2',
